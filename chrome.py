@@ -11,8 +11,9 @@ release = Key("shift:up, ctrl:up, alt:up")
 #Global mappings
 global_rule = MappingRule(
     mapping = {
-        #Editor commands
-        "mess": Key("c-s"),
+        #Chrome commands
+        "new tab": Key("c-t"),
+        "show links": Key("escape") + Key("f") + release,
     }
 )
 
@@ -33,9 +34,6 @@ code_insert_mode_rule = MappingRule(
         "plus": Text(" + "),
         "dub plus": Text("++"),
 
-        #Editor commands
-        "give me line": Key("sa-down"),
-
         # "bean"
         #"monkey"
     },
@@ -52,8 +50,8 @@ code_insert_mode_rule = MappingRule(
 code_ex_mode_rule = MappingRule(
     mapping = {
         #Commands
-        "delete line": Text("dd"),
-        "delete word": Text("dw"),
+        "delete line": "dd",
+        "delete [<n>] word": Text("%(n)ddw"),
         #Smbols
         # "quote": Key("quote"),
         # "laip": Key("lparen"),
@@ -122,14 +120,9 @@ if format_functions:
     class FormatRule(MappingRule):
         mapping  = format_functions
         extras   = [Dictation("dictation")]
+        
 else:
     FormatRule = None
-
-#Language specifics
-
-#Blade template engine
-
-
 
 #Vim functionality
 class ExMode(CompoundRule):
@@ -139,8 +132,6 @@ class ExMode(CompoundRule):
         Key("escape").execute()
         if InsertModeGrammar.enabled:
             InsertModeGrammar.disable()
-        if not ExModeGrammar.enabled:
-            ExModeGrammar.enable()
         # print "Insert disabled"
 
 class InsertMode(CompoundRule):
@@ -150,8 +141,6 @@ class InsertMode(CompoundRule):
         Key("i").execute()
         if not InsertModeGrammar.enabled:
             InsertModeGrammar.enable()
-        if ExModeGrammar.enabled:
-            ExModeGrammar.enable()
         # print "Insert enabled"
         
 #Load rules

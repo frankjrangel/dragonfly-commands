@@ -3,34 +3,43 @@ from dragonfly import (Grammar, AppContext, MappingRule, Dictation, IntegerRef,
 
 grammar = Grammar("dragon")
 
+release = Key("shift:up, ctrl:up, alt:up")
 dragon_rule = MappingRule(
 	name = "dragon",
 	mapping = {
 		#Dragon
 		"snore": Key("npdiv"),
 
+		#Windows
+		"previous app [<n>]": Key("alt:down") + Key("tab:%(n)d") + release,
+		"show apps": Key("alt:down") + Key("tab"),
+		"select app": Key("enter") + release,
+		"release keys": release,  
+
 		#Cursor Navigation
-		"[<n>] slap": Key("enter:%(n)d"),
-		"[<n>] tab": Key("tab:%(n)d"),
-		"[<n>] bar": Key("backspace:%(n)d"),
-		"[<n>] pill": Key("c-backspace:%(n)d"),
-		"[<n>] milk": Key("c-left:%(n)d"),
-		"[<n>] cheese": Key("c-right:%(n)d"),
+		"slap [<n>]": Key("enter:%(n)d"),
+		"tab [<n>]": Key("tab:%(n)d"),
+		"bar [<n>]": Key("backspace:%(n)d"),
+		"beer [<n>]": Key("del:%(n)d"),
+		"pill [<n>]": Key("c-backspace:%(n)d"),
+		"milk [<n>]": Key("c-left:%(n)d"),
+		"cheese [<n>]": Key("c-right:%(n)d"),
 		"queen": Key("end"),
 		"king": Key("home"),
-		"[<n>] up": Key("up:%(n)d"),
-   		"[<n>] down": Key("down:%(n)d"),
-    	"[<n>] left": Key("left:%(n)d"),
-    	"[<n>] right": Key("right:%(n)d"),
+		"up [<n>]": Key("up:%(n)d"),
+   		"down [<n>]": Key("down:%(n)d"),
+    	"left [<n>]": Key("left:%(n)d"),
+    	"right [<n>]": Key("right:%(n)d"),
 
 		#Symbols
-		"at": Text("@"),
+		"attitude": Text("@"),
 		"slash": Key("slash"),
 		"back up": Key("c-z"),
 
-		#Accounts
+		#Accounts and such
 		"Rangel": Text("frankjrangel"),
 		"classical": Text("qlasico"),
+		"some art": Text("tipearte"),
 	},
 	extras = [
 		Dictation("text"),
@@ -50,4 +59,3 @@ def unload():
     global grammar
     if grammar: grammar.unload()
     grammar = None
-

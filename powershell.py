@@ -19,9 +19,11 @@ bash_rule = MappingRule(
             #Git
             "initialize git": Text("git init") + Key("enter"),
             "git status": Text("git status") + Key("enter"),
+            "git commit": Text('git commit -m ""') + Key("left"),
             "git commit <text>": Text('git commit -m "%(text)s"'),
             "git clone": Text("git clone "),
             "git add all": Text("git add .") + Key("enter"),
+            "git push": Text("git push "),
             
             #Repositories
             "laradock repository": Text("https://github.com/laradock/laradock.git"),
@@ -30,8 +32,11 @@ bash_rule = MappingRule(
             "compose Laravel": Text("composer create-project --prefer-dist laravel/laravel "),
 
             #Docker
-            "start laradock": Text("docker-compose up -d nginx mysql phpmyadmin"),
-            "connect to laradock bash": Text("docker exec -it --user=laradock laradock_workspace_1 bash"),
+            "laradock start": Text("docker-compose up -d nginx mysql phpmyadmin"),
+            "laradock bash": Text("docker exec -it --user=laradock laradock_workspace_1 bash") + Key("enter"),
+            "docker start": Text("docker-compose up -d"),
+            "docker stop": Text("docker-compose stop"),
+            "exit container": Key("control:down") + Key("p") + Key("q") + Key("control:up"),
         },
         extras = [
             Dictation("text"),

@@ -39,7 +39,7 @@ def format_under_function(dictation):
 
 # Format: SomeWords
 def format_studley(dictation):
-    """ Pascal <dictation> """
+    """ rude <dictation> """
     text = str(dictation)
     words = [word.capitalize() for word in text.split(" ")]
     return "".join(words)
@@ -66,7 +66,7 @@ def format_upper_score(dictation):
 
 # Format: someWords
 def format_java_method(dictation):
-    """ camel <dictation> """
+    """ Java method <dictation> """
     text = str(dictation)
     words = text.split(" ")
     return words[0] + "".join(w.capitalize() for w in words[1:])
