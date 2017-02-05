@@ -43,7 +43,7 @@ dragon_rule = MappingRule(
 	},
 	extras = [
 		Dictation("text"),
-		IntegerRef("n", 1, 30),
+		IntegerRef("n", 1, 100),
 	],
 	defaults = {
 		"n": 1

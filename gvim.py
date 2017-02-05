@@ -39,7 +39,7 @@ gvim_insert_mode_rule = MappingRule(
 
         #Editor commands
         "back": Key("escape") + Key("u") + Key("i"),#Key("c-u"), TODO
-        "pill": Key("c-backspace"),
+        "pill|peel": Key("c-backspace"),
 
         # "bean"
         #"monkey"
@@ -56,11 +56,13 @@ gvim_insert_mode_rule = MappingRule(
 #Normal mode mappings
 gvim_normal_mode_rule = MappingRule(
     mapping = {
+        #Commands
         "delete line": Text("dd"),
         "late word": Key("d, w"),
         "give me line": Key("d:2, k, p:2"),
         "back":Key("u"),
         "line [<n>]": Text(":%(n)d") + Key("enter"),
+        "yank": Key("y"),
 
         #Visual Mode
         "visual": Key("v"),
@@ -72,15 +74,14 @@ gvim_normal_mode_rule = MappingRule(
         "window right": Key("c-w,l"),
         "window up": Key("c-w,k"),
         "window down": Key("c-w,j"),
-        "window split": Key("c-w,s"),
+        "window split": Key("c-w,v"),
         "window cycle": Key("c-w,c-w"),
-        "window vertical split": Key("c-w,v"),
-
+        "window horizontal split": Key("c-w,s"),
         
     },
     extras = [
         Dictation("text"),
-        IntegerRef("n", 1, 30)
+        IntegerRef("n", 1, 1000)
     ],
         defaults = {
         "n": 1
@@ -94,39 +95,15 @@ class ExModeCommands(CompoundRule):
     extras = [
         Choice("command", {
             "quit": Text("q"),
+            "save": Text("w"), 
             "save and quit": Text("wq"),
         })
     ]
 
-gvim_ex_mode_rule = MappingRule(
-    mapping = {
-        #Commands
-        
-
-        #Smbols
-        # "quote": Key("quote"),
-        # "laip": Key("lparen"),
-        # "raip": Key("rparen"),
-        # "langle": Key("langle"),
-        # "rangle": Key("rangle"),
-        # "lack": Text("["),
-        # "rack": Text("]"),
-        # "lobe": Text("{"),
-        # "robe": Text("}"),
-        # "plus": Text(" + "),
-        # "dub plus": Text("++"),
-
-        # # "bean"
-        # #"monkey"
-    },
-    extras = [
-        Dictation("text"),
-        IntegerRef("n", 1, 30)
-    ],
-        defaults = {
-        "n": 1
-    }
-)
+    def _process_recognition(self, node, extras):
+        Key("escape").execute()
+        Text(":").execute()
+        extras["command"].execute()
 
 #Plugin Mappings
 
@@ -193,21 +170,25 @@ class NormalMode(CompoundRule):
             NormalModeGrammar.enable()
 
 class InsertMode(CompoundRule):
-    spec = "<command>"
+    spec = "insert [<command>]"
     
     extras = [
         Choice("command", {
-            "insert": "i",
-            "insert end": "A",
-            "insert beg": "I",
-            "insert line": "o",
-            "insert delete": "C",
-            "insert delete line": "S",
-            "insert delete word": "c,w",
-            "insert delete space": "c,e",
-            "insert delete paragraph": "c,a,p",
+            "i": "i",
+            "end": "A",
+            "beg": "I",
+            "line": "o",
+            "delete": "C",
+            "delete line": "S",
+            "delete word": "c,w",
+            "delete space": "c,e",
+            "delete paragraph": "c,a,p",
         })
     ]
+
+    defaults = {
+        "command": "i",
+    }
 
     def _process_recognition(self, node, extras):
         for string in extras["command"].split(','):
@@ -286,6 +267,7 @@ InsertModeGrammar.load()
 NormalModeGrammar = Grammar("Normal Mode", context = grammar_context)
 NormalModeGrammar.add_rule(gvim_normal_mode_rule)
 NormalModeGrammar.add_rule(IndentRule())
+NormalModeGrammar.add_rule(ExModeCommands())
 NormalModeGrammar.load()
 
 def unload():
