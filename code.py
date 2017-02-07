@@ -32,6 +32,13 @@ code_insert_mode_rule = MappingRule(
         "robe": Text("}"),
         "plus": Text(" + "),
         "dub plus": Text("++"),
+        "equals": Text(" = "),
+        "minus": Text("-"),
+        "percent": Key("percent"),
+        "Aruba": Text("@"),
+        "boom": Text("!"),
+        "dollar": Text("$"),
+        "arrow": Text("->"),
 
         #Editor commands
         "give me line": Key("sa-down"),

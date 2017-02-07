@@ -14,6 +14,7 @@ global_rule = MappingRule(
         #Global commands
         "mess": Key("escape") + Text(":w") + Key("enter") + release,
         "reload vim": Key("escape") + Text(":so $MYVIMRC") + Key("enter") + release,
+        "go to file": Key("c-p"),
     }
 )
 
@@ -43,7 +44,6 @@ gvim_insert_mode_rule = MappingRule(
 
         #Editor commands
         "back": Key("escape") + Key("u") + Key("i"),#Key("c-u"), TODO
-        "pill|peel": Key("c-backspace"),
 
         # "bean"
         #"monkey"
@@ -98,16 +98,19 @@ gvim_normal_mode_rule = MappingRule(
 
 #Ex mode mappings
 class ExModeCommands(CompoundRule):
-    spec = "execute <command>"
+    spec = "execute [<command>]"
 
     extras = [
         Choice("command", {
-            "command": "c",
             "quit": Text("q"),
             "save": Text("w"), 
             "save and quit": Text("wq"),
         })
     ]
+
+    defaults = {
+        "command": "c"
+    }
 
     def _process_recognition(self, node, extras):
         Key("escape").execute()

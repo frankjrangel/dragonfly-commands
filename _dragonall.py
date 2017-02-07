@@ -21,7 +21,7 @@ dragon_rule = MappingRule(
 		"tab [<n>]": Key("tab:%(n)d"),
 		"bar [<n>]": Key("backspace:%(n)d"),
 		"beer [<n>]": Key("del:%(n)d"),
-		"pill [<n>]": Key("c-backspace:%(n)d"),
+		"pill|peel [<n>]": Key("c-backspace:%(n)d"),
 		"milk [<n>]": Key("c-left:%(n)d"),
 		"cheese [<n>]": Key("c-right:%(n)d"),
 		"queen": Key("end"),
@@ -50,6 +50,7 @@ dragon_rule = MappingRule(
 	}
 )
 
+# TODO add formatting rules here instead of per program
 
 grammar.add_rule(dragon_rule)
 grammar.load()

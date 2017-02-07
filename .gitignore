@@ -1,4 +1,5 @@
 core
+tags
 .vscode
 *.pyc
 *.swp
