@@ -13,6 +13,7 @@ global_rule = MappingRule(
     mapping = {
         #Global commands
         "mess": Key("escape") + Text(":w") + Key("enter") + release,
+        "reload vim": Key("escape") + Text(":so $MYVIMRC") + Key("enter") + release,
     }
 )
 
@@ -36,6 +37,9 @@ gvim_insert_mode_rule = MappingRule(
         "minus": Text("-"),
         "percent": Key("percent"),
         "Aruba": Text("@"),
+        "boom": Text("!"),
+        "dollar": Text("$"),
+        "arrow": Text("->"),
 
         #Editor commands
         "back": Key("escape") + Key("u") + Key("i"),#Key("c-u"), TODO
@@ -63,6 +67,9 @@ gvim_normal_mode_rule = MappingRule(
         "back":Key("u"),
         "line [<n>]": Text(":%(n)d") + Key("enter"),
         "yank": Key("y"),
+        "yank line": Key("y, y"),
+        "paste": Key("p"),
+        "take me back": Key("c-o"),
 
         #Visual Mode
         "visual": Key("v"),
@@ -77,6 +84,7 @@ gvim_normal_mode_rule = MappingRule(
         "window split": Key("c-w,v"),
         "window cycle": Key("c-w,c-w"),
         "window horizontal split": Key("c-w,s"),
+        "window only": Key("escape") + Text(":only") + Key("enter"),
         
     },
     extras = [
@@ -94,6 +102,7 @@ class ExModeCommands(CompoundRule):
 
     extras = [
         Choice("command", {
+            "command": "c",
             "quit": Text("q"),
             "save": Text("w"), 
             "save and quit": Text("wq"),
@@ -103,7 +112,8 @@ class ExModeCommands(CompoundRule):
     def _process_recognition(self, node, extras):
         Key("escape").execute()
         Text(":").execute()
-        extras["command"].execute()
+        if extras["command"] != "c":
+            extras["command"].execute()
 
 #Plugin Mappings
 
