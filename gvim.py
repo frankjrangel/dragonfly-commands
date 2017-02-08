@@ -70,6 +70,7 @@ gvim_normal_mode_rule = MappingRule(
         "yank line": Key("y, y"),
         "paste": Key("p"),
         "take me back": Key("c-o"),
+        "center line": Key("z, z"),
 
         #Visual Mode
         "visual": Key("v"),
@@ -129,6 +130,7 @@ class NerdTreeRule(CompoundRule):
             "tree": Text(":NERDTreeToggle") + Key("enter"),
             "open": Key("o"),
             "make root": Key("C"),
+            "reload": Key("R"),
         })
     ]
 
