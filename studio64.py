@@ -127,48 +127,22 @@ class LetterRule(MappingRule):
         'eight': Key('8'),
         'nine': Key('9'),
 
-        'space': Key('space'),
-        'tab': Key('tab'),
-
-        'ampersand': Key('ampersand'),
         'apostrophe': Key('apostrophe'),
         'asterisk': Key('asterisk'),
-        'at': Key('at'),
         'backslash': Key('backslash'),
         'backtick': Key('backtick'),
-        'bar': Key('bar'),
         'caret': Key('caret'),
         'colon': Key('colon'),
         'comma': Key('comma'),
         'dollar': Key('dollar'),
         '(dot|period)': Key('dot'),
-        'double quote': Key('dquote'),
+        'quote': Key('dquote'),
         'equal': Key('equal'),
-        'bang': Key('exclamation'),
         'hash': Key('hash'),
         'hyphen': Key('hyphen'),
-        'minus': Key('minus'),
-        'percent': Key('percent'),
-        'plus': Key('plus'),
         'question': Key('question'),
-        'chuck': Text(';'),
-        'slash': Key('slash'),
-        '[single] quote': Key('squote'),
         'tilde': Key('tilde'),
-        'underscore | score': Key('underscore'),
 
-        'langle': Key('langle'),
-        'lace': Key('lbrace'),
-        'lack': Key('lbracket'),
-        'laip': Key('lparen'),
-        'rangle': Key('rangle'),
-        'race': Key('rbrace'),
-        'rack': Key('rbracket'),
-        'raip': Key('rparen'),
-        'assign' : Key('space, equal, space'),
-        'slap' : Key('enter'),
-        'milk' : Key('c-left'),
-        'cheese' : Key('c-right'),
     }
 
 letter = RuleRef(rule=LetterRule(), name='letter')
@@ -251,15 +225,9 @@ class NormalModeKeystrokeRule(MappingRule):
     exported = False
 
     mapping = {
-        "[<n>] up": Key("k:%(n)d"),
-        "[<n>] down": Key("j:%(n)d"),
-        "[<n>] left": Key("h:%(n)d"),
-        "[<n>] right": Key("l:%(n)d"),
-        "[<n>] go up": Key("c-b:%(n)d"),
-        "[<n>] go down": Key("c-f:%(n)d"),
         "hat": Key("caret"),
-        "dollar": Key("dollar"),
-        "match": Key("percent"),
+        "match": Key("dollar"),
+        "percent": Key("percent"),
         "doc home": Key("c-home"),
         "doc end": Key("c-end"),
 
@@ -345,11 +313,6 @@ class NormalModeKeystrokeRule(MappingRule):
         "shift right": Key("rangle,rangle"),
 
         "fuzzy find": Key("backslash,t"),
-
-	# Python specific macros that work together with certain plug-ins
-	
-	# used in Jedi vim
-	"go to definition": Key("backslash,d"),
 
         # Pete is shorthand for repeat
         "[<n>] Pete": Key("dot:%(n)d"),
@@ -524,10 +487,6 @@ class ExModeEnabler(CompoundRule):
         ExModeGrammar.enable()
         Key("colon").execute()
         self._log.debug("ExMode grammar enabled")
-        print "Available commands:"
-        print '  \n'.join(ExModeCommands.mapping.keys())
-        print "\n(EX MODE)"
-
 
 
 class ExModeDisabler(CompoundRule):
@@ -543,12 +502,9 @@ class ExModeDisabler(CompoundRule):
         exModeBootstrap.enable()
         normalModeGrammar.enable()
         if extras["command"] == "cancel":
-            print "ex mode command canceled"
             Key("escape").execute()
         else:
-            print "ex mode command accepted"
             Key("enter").execute()
-        print "\n(NORMAL)"
 
 # handles ExMode control structures
 class ExModeCommands(MappingRule):
@@ -611,9 +567,6 @@ class InsertModeEnabler(CompoundRule):
 
         "oh": "o",
         "shift oh": "O",
-
-	# Jedi vim rename command
-	"rename": "backslash,r",
     })]
 
     def _process_recognition(self, node, extras):
@@ -623,10 +576,6 @@ class InsertModeEnabler(CompoundRule):
         for string in extras["command"].split(','):
             key = Key(string)
             key.execute()
-        print "Available commands:"
-        print '  \n'.join(InsertModeCommands.mapping.keys())
-        print "\n(INSERT)"
-
 
 
 class InsertModeDisabler(CompoundRule):
@@ -644,11 +593,6 @@ class InsertModeDisabler(CompoundRule):
         Key("escape").execute()
         if extras["command"] == "cancel":
             Key("u").execute()
-            print "Insert command canceled"
-        else:
-            print "Insert command accepted"
-        print "\n(NORMAL)"
-
 
 # handles InsertMode control structures
 class InsertModeCommands(MappingRule):
@@ -695,7 +639,7 @@ studio64_exec_context = AppContext(executable="studio64")
 vim_putty_context = AppContext(title="vim")
 studio64_context = (studio64_exec_context | vim_putty_context)
 
-# set up the grammar for vim's ex mode
+# # set up the grammar for vim's ex mode
 exModeBootstrap = Grammar("ExMode bootstrap", context=studio64_context)
 exModeBootstrap.add_rule(ExModeEnabler())
 exModeBootstrap.load()

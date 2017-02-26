@@ -6,46 +6,126 @@ except ImportError:
 
 from dragonfly import *
 
-grammar_context = AppContext(executable="idea")
-grammar = Grammar("idea", context = grammar_context)
-
 release = Key("shift:up, ctrl:up, alt:up")
+
+ide_commands_mappings = MappingRule(
+    mapping = {
+        #IDE commands
+        "override method": Key("c-o"),
+    }
+)
+
 idea_rule = MappingRule(
-        name = "idea",
-        mapping = {
-            #Symbols
-            "chuck": Text(";"),
-            "quote": Key("quote"),
-            "laip": Key("lparen"),
-            "raip": Key("rparen"),
-            "langle": Key("langle"),
-            "rangle": Key("rangle"),
-            "lack": Text("["),
-            "rack": Text("]"),
-            "lobe": Text("{"),
-            "robe": Text("}"),
-            "plus": Text(" + "),
-            "dub plus": Text("++"),
+    name = "idea",
+    mapping = {
+        #Symbols
+        "chuck": Text(";"),
+        "laip [<n>]": Key("lparen:%(n)d"),
+        "raip [<n>]": Key("rparen:%(n)d"),
+        "langle [<n>]": Key("langle:%(n)d"),
+        "rangle [<n>]": Key("rangle:%(n)d"),
+        "lack [<n>]": Key("lbracket:%(n)d"),
+        "rack [<n>]": Key("rbracket:%(n)d"),
+        "lobe [<n>]": Key("lbrace:%(n)d"),
+        "robe [<n>]": Key("rbrace:%(n)d"),
+        "mass": Text("+"),
+        "plus": Text(" + "),
+        "dub plus": Text("++"),
+        "equal [<n>]": Key("equal:%(n)d"),
+        "equals": Text(" = "),
+        "and if [<n>]": Key("ampersand:%(n)d"),
+        "percent": Key("percent"),
+        "boom": Text("!"),
+        "match": Text("$"),
+        "arrow": Text("->"),
+        "backslash": Key("backslash"),
+        "quotes": Key("dquote"),
+        "quote": Key("squote"),
+        "minus": Text("-"),
+        "underscore": Key("underscore"),
+        "pound": Key('hash'),
 
-            #Editor commands
-            "mess": Key("c-s"),
+        #Editor commands
+        "mess": Key("c-s"),
 
-            #Ex mode
-            "ex buff": Key("escape"),
-            "bean": Key("i"),
-            #"monkey"
-        },
-        extras = [
-            Dictation("text"),
-            IntegerRef("n", 1, 30)
-        ],
-         defaults = {
-            "n": 1
-        }
-    )
-   
+        #Ex mode
+        "ex buff": Key("escape"),
+        #"monkey"
+    },
+    extras = [
+        Dictation("text"),
+        IntegerRef("n", 1, 30)
+    ],
+     defaults = {
+        "n": 1
+    }
+)
+
+#Normal mode mappings
+idea_normal_mode_rule = MappingRule(
+    mapping = {
+        #Commands
+        "delete line": Text("dd"),
+        "late word": Key("d, w"),
+        "give me line": Key("y:2, p:2"),
+        "back":Key("u"),
+        "line [<n>]": Text(":%(n)d") + Key("enter"),
+        "yank": Key("y"),
+        "yank line": Key("y, y"),
+        "paste": Key("p"),
+        "center line": Key("z, z"),
+
+        #Visual Mode
+        "visual": Key("v"),
+        "visual line": Key("s-v"),
+        "visual block": Key("c-v"),
+
+        #Splits and tabs
+        "window left": Key("c-w,h"),
+        "window right": Key("c-w,l"),
+        "window up": Key("c-w,k"),
+        "window down": Key("c-w,j"),
+        "window split": Key("c-w,v"),
+        "window cycle": Key("c-w,c-w"),
+        "window horizontal split": Key("c-w,s"),
+        "window only": Key("escape") + Text(":only") + Key("enter"),
+        
+    },
+    extras = [
+        Dictation("text"),
+        IntegerRef("n", 1, 1000)
+    ],
+        defaults = {
+        "n": 1
+    }
+)
+
+#Ex mode mappings
+class ExModeCommands(CompoundRule):
+    spec = "execute [<command>]"
+
+    extras = [
+        Choice("command", {
+            "quit": Text("q"),
+            "save": Text("w"), 
+            "save and quit": Text("wq"),
+        })
+    ]
+
+    defaults = {
+        "command": "c"
+    }
+
+    def _process_recognition(self, node, extras):
+        Key("escape").execute()
+        Text(":").execute()
+        if extras["command"] != "c":
+            extras["command"].execute()
+
+
+
+
 grammar.add_rule(idea_rule)
-
 
 #---------------------------------------------------------------------------
 # Set up this module's configuration.
@@ -93,8 +173,13 @@ if format_functions:
         mapping  = format_functions
         extras   = [Dictation("dictation")]
 
-&else:
+else:
     FormatRule = None
+
+# Load rules
+grammar_context = AppContext(executable="idea")
+
+GlobalGrammar = Grammar("Global grammar", context = grammar_context)
 
 if FormatRule:
     grammar.add_rule(rule=FormatRule())
