@@ -28,11 +28,11 @@ dragon_rule = MappingRule(
 		"king": Key("home"),
 		"up [<n>]": Key("up:%(n)d"),
    		"down [<n>]": Key("down:%(n)d"),
-    	"left [<n>]": Key("left:%(n)d"),
-    	"right [<n>]": Key("right:%(n)d"),
+                "left [<n>]": Key("left:%(n)d"),
+                "right [<n>]": Key("right:%(n)d"),
 
 		#Symbols
-		"attitude": Text("@"),
+		"attitude|Aruba": Text("@"),
 		"slash": Key("slash"),
 		"back up": Key("c-z"),
 
