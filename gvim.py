@@ -23,7 +23,8 @@ gvim_insert_mode_rule = MappingRule(
     mapping = {
         #Symbols
         "chuck": Text(";"),
-        "quote": Key("quote"),
+        "quote": Key("squote"),
+        "quotes": Key("quote"),
         "laip": Key("lparen"),
         "raip": Key("rparen"),
         "langle": Key("langle"),
@@ -34,7 +35,8 @@ gvim_insert_mode_rule = MappingRule(
         "robe": Text("}"),
         "plus": Text(" + "),
         "dub plus": Text("++"),
-        "equals": Text(" = "),
+        "assign": Text(" = "),
+        "equals": Text(" == "),
         "minus": Text("-"),
         "percent": Key("percent"),
         "Aruba": Text("@"),
@@ -47,6 +49,13 @@ gvim_insert_mode_rule = MappingRule(
 
         # "bean"
         #"monkey"
+
+        #Language specifics
+        #PHP
+        "PHP tag": Text("<?php "),
+        "complete PHP tag": Text("<?php  ?>") + Key("left:3"),
+        "close PHP tag": Text("?>"),
+        "dollar [<text>]": Text("$%(text)s"),
     },
     extras = [
         Dictation("text"),
