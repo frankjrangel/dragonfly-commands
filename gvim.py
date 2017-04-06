@@ -51,22 +51,37 @@ gvim_insert_mode_rule = MappingRule(
         
         #Editor commands
         "back": Key("escape") + Key("u") + Key("i"),#Key("c-u"), TODO
+        "fix": Key("c-left") + Key("backspace") + Key("end"), # Needs work
 
         # "bean"
         #"monkey"
 
         #Language specifics
+        ###################
         #PHP
         "PHP tag": Text("<?php "),
         "complete PHP tag": Text("<?php  ?>") + Key("left:3"),
         "close PHP tag": Text("?>"),
+        "dollar": Text("$"),
         "dollar [<text>]": Text("$%(text)s"),
+
+        #HTML
+        "luck": Text("<div>") + Key("left") + Text(" "),
+        "close luck": Text("</div>"),
+        "bootstrap row": Text('<div class="row">') + Key("enter") + Text("</div>"),
+        "paragraph | P": Text("<p>"),
+        "close paragraph | close P": Text("</p>"),
+        "HTML comment": Text("<!--  -->") + Key("left:4"),
+        "PX": Text("px"),
+        "ID": Text("id"),
+        "H1": Text("<h1>"),        # this
+        "close H1": Text("</h1>"), # should be a rule for all elements
     },
     extras = [
         Dictation("text"),
         IntegerRef("n", 1, 30)
     ],
-        defaults = {
+    defaults = {
         "n": 1
     }
 )
